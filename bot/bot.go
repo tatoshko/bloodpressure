@@ -42,6 +42,8 @@ func Start(config Config) {
                         )
                         go handler(API, update)
                     }
+                } else {
+                    log.Printf(message.Text)
                 }
             } else if update.CallbackQuery != nil {
                 data := update.CallbackQuery.Data
