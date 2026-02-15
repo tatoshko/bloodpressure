@@ -26,6 +26,7 @@ func (us UserService) FindById(telegramId int64) (user *User, err error) {
     var row *sql.Row
     row = pg.QueryRow(q, telegramId)
 
+    user = &User{}
     if err = row.Scan(&user.UUID, &user.TelegramId, &user.CreatedAt); err != nil {
         return nil, err
     }
