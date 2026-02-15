@@ -8,4 +8,4 @@ build:
 	@ git pull origin main
 	@ cd assets && rice embed-go && cd ..
 	@ ~/go/bin/go build -ldflags="-s -w"
-	@ sudo systemctl restart embercat
+	@ sudo systemctl restart bloodpressure
