@@ -1,0 +1,14 @@
+[Unit]
+Description=Blood pressure bot service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/var/bot/bloodpressure
+ExecStart=/var/bot/bloodpressure/bloodpressure
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
