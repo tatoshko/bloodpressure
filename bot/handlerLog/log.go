@@ -16,7 +16,7 @@ func Log(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     params := core.GetParams(`^(?P<up>\d+)\D+(?P<down>\d+)\D+(?P<pulse>\d+)$`, update.Message.Text)
 
     if len(params) == 3 {
-        logger(fmt.Sprintf("UserID: %d, Params: %v", userID, params))
+        //logger(fmt.Sprintf("UserID: %d, Params: %v", userID, params))
 
         userService := core.NewUserService()
 
