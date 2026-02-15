@@ -8,7 +8,6 @@ import (
     "useful.team/bloodpressure/m/bot/core"
     "useful.team/bloodpressure/m/bot/handlerLog"
     "useful.team/bloodpressure/m/bot/handlerStart"
-    "useful.team/bloodpressure/m/bot/handlerThreat"
 )
 
 var (
@@ -73,5 +72,4 @@ func Start(config Config) {
 func registerCommands() {
     Commands["start"] = handlerStart.Start
     Commands["stat"] = handlerLog.Stat
-    Commands["thread"] = handlerThreat.HandleThread
 }
