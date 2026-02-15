@@ -72,5 +72,6 @@ func Start(config Config) {
 
 func registerCommands() {
     Commands["start"] = handlerStart.Start
+    Commands["stat"] = handlerLog.Stat
     Commands["thread"] = handlerThreat.HandleThread
 }
