@@ -7,7 +7,6 @@ import (
     "log"
     "net/http"
     "os"
-    "useful.team/bloodpressure/m/assets"
     "useful.team/bloodpressure/m/bot"
     "useful.team/bloodpressure/m/pgsql"
 )
@@ -28,7 +27,6 @@ type Config struct {
 func main() {
     config := ReadConfig()
 
-    assets.InitBox()
     go initHttpServer(config.Server)
     go pgsql.Init(config.Pg)
     bot.Start(config.Bot)
