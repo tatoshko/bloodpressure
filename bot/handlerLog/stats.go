@@ -29,7 +29,7 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     var logRecords []*LogRecord
     if logRecords, err = logService.Stat(30); err != nil {
-        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Пользователь не найден: %s", err.Error()))
+        msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Не смог достать записи: %s", err.Error()))
 
         if _, err := bot.Send(msg); err != nil {
             logger(err.Error())
