@@ -39,7 +39,7 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     var statMessage string
     for _, record := range logRecords {
-        statMessage += fmt.Sprintf("[%s] Давление: <b>%d/%d</b>, Пульс: <b>%d</b>\n", record.CreatedAt.Format("02 Jan 15:04"), record.Up, record.Down, record.Pulse)
+        statMessage += fmt.Sprintf("[%s] Давление: <b>%3d/%3d</b> Пульс: <b>%3d</b>\n", record.CreatedAt.Format("02 Jan 15:04"), record.Up, record.Down, record.Pulse)
     }
 
     msg := tgbotapi.NewMessage(chatID, statMessage)
