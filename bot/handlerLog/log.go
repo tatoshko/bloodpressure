@@ -12,5 +12,7 @@ func Log(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     userID := update.Message.From.ID
     params := core.GetParams(`^(?P<up>\d+)\D+(?P<down>\d+)\D+(?P<pulse>\d+)$`, update.Message.Text)
 
+    //logService := NewLogService(userID)
+
     logger(fmt.Sprintf("UserID: %d, Params: %v", userID, params))
 }
