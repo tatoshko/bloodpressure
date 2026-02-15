@@ -70,6 +70,6 @@ func Start(config Config) {
 }
 
 func registerCommands() {
-    Commands["/start"] = handlerNew.HandleNew
+    Commands["start"] = handlerNew.HandleNew
     Commands["thread"] = handlerThreat.HandleThread
 }
