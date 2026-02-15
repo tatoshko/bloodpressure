@@ -32,16 +32,18 @@ func (ls LogService) Add(up, down, pulse int) (err error) {
     return err
 }
 
-func (ls LogService) Stat(limit int) (logRecords []*LogRecord, err error) {
+func (ls LogService) GetStat(limit int) (logRecords []*LogRecord, err error) {
     pg := pgsql.GetClient()
     q := `select uuid, user_uuid, up, down, pulse, created_at from log where user_uuid = $1 order by created_at asc limit $2`
 
     var rows *sql.Rows
     if rows, err = pg.Query(q, ls.User.UUID, limit); err != nil {
         return nil, err
-    } else {
-        lr := &LogRecord{}
+    }
+    defer rows.Close()
 
+    for rows.Next() {
+        lr := &LogRecord{}
         if err = rows.Scan(&lr.UUID, &lr.UserUUID, &lr.Up, &lr.Down, &lr.Pulse, &lr.CreatedAt); err != nil {
             return nil, err
         } else {

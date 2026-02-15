@@ -8,7 +8,7 @@ import (
 
 func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
-    logger := getLogger("Stat")
+    logger := getLogger("GetStat")
 
     userID := update.Message.From.ID
     chatID := update.Message.Chat.ID
@@ -28,7 +28,7 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     logService := NewLogService(user)
 
     var logRecords []*LogRecord
-    if logRecords, err = logService.Stat(30); err != nil {
+    if logRecords, err = logService.GetStat(30); err != nil {
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Не смог достать записи: %s", err.Error()))
 
         if _, err := bot.Send(msg); err != nil {
