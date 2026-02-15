@@ -6,5 +6,5 @@ deploy:
 build:
 	@ go mod tidy
 	@ git pull origin main
-	@ ~/go/bin/go build -ldflags="-s -w"
+	@ go build -ldflags="-s -w"
 	@ sudo systemctl restart bloodpressure
