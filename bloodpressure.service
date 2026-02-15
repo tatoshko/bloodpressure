@@ -7,7 +7,7 @@ Type=simple
 User=root
 Group=root
 WorkingDirectory=/var/bot/bloodpressure
-ExecStart=/var/bot/bloodpressure/bloodpressure
+ExecStart=/var/bot/bloodpressure/m
 Restart=always
 
 [Install]
