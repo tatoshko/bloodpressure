@@ -6,6 +6,7 @@ import (
     "strings"
     "useful.team/bloodpressure/m/bot/callbacks"
     "useful.team/bloodpressure/m/bot/core"
+    "useful.team/bloodpressure/m/bot/handlerNew"
     "useful.team/bloodpressure/m/bot/handlerThreat"
 )
 
@@ -69,6 +70,6 @@ func Start(config Config) {
 }
 
 func registerCommands() {
-    // Other
+    Commands["/start"] = handlerNew.HandleNew
     Commands["thread"] = handlerThreat.HandleThread
 }
