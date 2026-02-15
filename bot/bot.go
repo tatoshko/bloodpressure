@@ -6,7 +6,8 @@ import (
     "strings"
     "useful.team/bloodpressure/m/bot/callbacks"
     "useful.team/bloodpressure/m/bot/core"
-    "useful.team/bloodpressure/m/bot/handlerNew"
+    "useful.team/bloodpressure/m/bot/handlerLog"
+    "useful.team/bloodpressure/m/bot/handlerStart"
     "useful.team/bloodpressure/m/bot/handlerThreat"
 )
 
@@ -44,7 +45,7 @@ func Start(config Config) {
                         go handler(API, update)
                     }
                 } else {
-                    log.Printf(message.Text)
+                    go handlerLog.Log(API, update)
                 }
             } else if update.CallbackQuery != nil {
                 data := update.CallbackQuery.Data
@@ -70,6 +71,6 @@ func Start(config Config) {
 }
 
 func registerCommands() {
-    Commands["start"] = handlerNew.HandleNew
+    Commands["start"] = handlerStart.Start
     Commands["thread"] = handlerThreat.HandleThread
 }

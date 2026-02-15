@@ -1,4 +1,4 @@
-package handlerNew
+package handlerStart
 
 import (
     "useful.team/bloodpressure/m/pgsql"

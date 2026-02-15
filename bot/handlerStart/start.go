@@ -1,11 +1,11 @@
-package handlerNew
+package handlerStart
 
 import (
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func HandleNew(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func Start(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
 
     logger := getLogger("Add new user")
