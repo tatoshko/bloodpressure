@@ -24,7 +24,7 @@ func NewLogService(user *core.User) *LogService {
     return &LogService{User: user}
 }
 
-func (ls LogService) Add(up, down, pulse int) (err error) {
+func (ls *LogService) Add(up, down, pulse int) (err error) {
     pg := pgsql.GetClient()
     q := `insert into log (user_uuid, up, down, pulse) VALUES ($1, $2, $3, $4)`
 
@@ -32,7 +32,7 @@ func (ls LogService) Add(up, down, pulse int) (err error) {
     return err
 }
 
-func (ls LogService) GetStat(limit int) (logRecords []*LogRecord, err error) {
+func (ls *LogService) GetLast(limit int) (logRecords []*LogRecord, err error) {
     pg := pgsql.GetClient()
     q := `select uuid, user_uuid, up, down, pulse, created_at from log where user_uuid = $1 order by created_at asc limit $2`
 
@@ -52,4 +52,39 @@ func (ls LogService) GetStat(limit int) (logRecords []*LogRecord, err error) {
     }
 
     return logRecords, nil
+}
+
+func (ls *LogService) FindHighestPressure(records []*LogRecord) *LogRecord {
+    if len(records) <= 0 {
+        return nil
+    }
+
+    max := records[0]
+    maxSum := max.Up + max.Down
+
+    for _, record := range records[1:] {
+        recordSum := record.Up + record.Down
+        if recordSum > maxSum {
+            max = record
+            maxSum = recordSum
+        }
+    }
+
+    return max
+}
+
+func (ls *LogService) FindHighestPulse(records []*LogRecord) *LogRecord {
+    if len(records) <= 0 {
+        return nil
+    }
+
+    max := records[0]
+
+    for _, record := range records[1:] {
+        if record.Pulse > max.Pulse {
+            max = record
+        }
+    }
+
+    return max
 }

@@ -10,7 +10,7 @@ import (
 
 func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
-    logger := getLogger("GetStat")
+    logger := getLogger("GetLast")
 
     userID := update.Message.From.ID
     chatID := update.Message.Chat.ID
@@ -28,9 +28,10 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     logService := NewLogService(user)
+    lastRecordsCount := 30
 
     var logRecords []*LogRecord
-    if logRecords, err = logService.GetStat(30); err != nil {
+    if logRecords, err = logService.GetLast(lastRecordsCount); err != nil {
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Не смог достать записи: %s", err.Error()))
 
         if _, err := bot.Send(msg); err != nil {
@@ -41,9 +42,12 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     // Send Summary
     var statMessage string
-    for _, record := range logRecords {
-        statMessage += fmt.Sprintf("<code>[%s] Давление: <b>%d/%d</b> Пульс: <b>%d</b></code>\n", record.CreatedAt.Format("02 Jan 15:04"), record.Up, record.Down, record.Pulse)
-    }
+
+    highestPressure := logService.FindHighestPressure(logRecords)
+    highestPulse := logService.FindHighestPulse(logRecords)
+
+    statMessage += fmt.Sprintf("Самое высокое за последнее время:\n%s\n<b>%d/%d</b>\nПри пульсе: %d\n\n", highestPressure.CreatedAt.Format("02 Jan 15:04"), highestPressure.Up, highestPressure.Down, highestPressure.Pulse)
+    statMessage += fmt.Sprintf("Самое высокий пульс:\n%s\n<b>%d</b>\nПри давлении: %d/%d", highestPulse.CreatedAt.Format("02 Jan 15:04"), highestPulse.Pulse, highestPressure.Up, highestPressure.Down)
 
     msg := tgbotapi.NewMessage(chatID, statMessage)
     msg.ParseMode = tgbotapi.ModeHTML
@@ -60,12 +64,7 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         }
     }()
 
-    var index int
-    if index, err = f.NewSheet("Log"); err != nil {
-        logger(err.Error())
-        return
-    }
-    f.SetActiveSheet(index)
+    f.SetSheetName("Sheet1", "Log")
 
     f.SetCellStr("Log", "A1", "Date")
     f.SetCellStr("Log", "B1", "Up")
