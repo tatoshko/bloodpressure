@@ -56,8 +56,8 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     statMessage += fmt.Sprintf(
         "Самый высокий пульс:\n<b>%d</b> при давлении: %d/%d был %s\n\n",
         highestPulse.Pulse,
-        highestPressure.Up,
-        highestPressure.Down,
+        highestPulse.Up,
+        highestPulse.Down,
         highestPulse.CreatedAt.Format("02 Jan 15:04"),
     )
     statMessage += fmt.Sprintf(
