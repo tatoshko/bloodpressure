@@ -112,9 +112,12 @@ func (ls *LogService) FindMedian(records []*LogRecord) *LogRecord {
     a := records[(l/2)-1]
     b := records[l/2]
 
-    if (a.Up + a.Down) > (b.Up + b.Down) {
+    if a.Score() > b.Score() {
         return a
     } else {
+        if a.Up > b.Up {
+            return a
+        }
         return b
     }
 }
