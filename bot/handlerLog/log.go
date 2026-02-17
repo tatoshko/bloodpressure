@@ -36,7 +36,7 @@ func Log(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             if err := logService.Add(up, down, pulse); err != nil {
                 logger(err.Error())
             } else {
-                msg := tgbotapi.NewMessage(chatID, "OK")
+                msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Добавло: %d/%d пульс %d", up, down, pulse))
                 if _, err := bot.Send(msg); err != nil {
                     logger(err.Error())
                 }

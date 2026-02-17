@@ -72,4 +72,5 @@ func Start(config Config) {
 func registerCommands() {
     Commands["start"] = handlerStart.Start
     Commands["stat"] = handlerLog.Stat
+    Commands["xlsx"] = handlerLog.Xlsx
 }
