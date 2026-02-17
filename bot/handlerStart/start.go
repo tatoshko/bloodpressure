@@ -36,7 +36,8 @@ func Start(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
         return
     } else {
-        msg := tgbotapi.NewMessage(chatId, "Добро пожаловать! Что бы добавить в журнал запись, просто отправьте сообщение вида 120 80 60 - где 120 верхнее давление, 80 нижнее, 60 пульс")
+        msg := tgbotapi.NewMessage(chatId, "Добро пожаловать! Что бы добавить в журнал запись, просто отправьте сообщение вида\n<code>120 80 60</code>\n - где 120 верхнее давление, 80 нижнее, 60 пульс")
+        msg.ParseMode = tgbotapi.ModeHTML
 
         if _, err = bot.Send(msg); err != nil {
             logger(err.Error())
