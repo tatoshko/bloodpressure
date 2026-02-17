@@ -45,9 +45,28 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     highestPressure := logService.FindHighestPressure(logRecords)
     highestPulse := logService.FindHighestPulse(logRecords)
+    medianPressure := logService.FindMedian(logRecords)
 
-    statMessage += fmt.Sprintf("Самое высокое за последнее время:\n%s\n<b>%d/%d</b>\nПри пульсе: %d\n\n", highestPressure.CreatedAt.Format("02 Jan 15:04"), highestPressure.Up, highestPressure.Down, highestPressure.Pulse)
-    statMessage += fmt.Sprintf("Самое высокий пульс:\n%s\n<b>%d</b>\nПри давлении: %d/%d", highestPulse.CreatedAt.Format("02 Jan 15:04"), highestPulse.Pulse, highestPressure.Up, highestPressure.Down)
+    statMessage += "За последнее время\n"
+    statMessage += fmt.Sprintf(
+        "Самое высокое давление:\n<b>%d/%d</b> при пульсе: %d, было %s\n\n",
+        highestPressure.Up,
+        highestPressure.Down,
+        highestPressure.Pulse,
+        highestPressure.CreatedAt.Format("02 Jan 15:04"),
+    )
+    statMessage += fmt.Sprintf(
+        "Самый высокий пульс:\n%s\n<b>%d</b> при давлении: %d/%d",
+        highestPulse.CreatedAt.Format("02 Jan 15:04"),
+        highestPulse.Pulse,
+        highestPressure.Up,
+        highestPressure.Down,
+    )
+    statMessage += fmt.Sprintf(
+        "Медианное значение: %d/%d",
+        medianPressure.Up,
+        medianPressure.Down,
+    )
 
     msg := tgbotapi.NewMessage(chatID, statMessage)
     msg.ParseMode = tgbotapi.ModeHTML

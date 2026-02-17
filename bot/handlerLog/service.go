@@ -2,6 +2,7 @@ package handlerLog
 
 import (
     "database/sql"
+    "sort"
     "time"
     "useful.team/bloodpressure/m/bot/core"
     "useful.team/bloodpressure/m/pgsql"
@@ -14,6 +15,10 @@ type LogRecord struct {
     Down      int       `json:"down,omitempty"`
     Pulse     int       `json:"pulse,omitempty"`
     CreatedAt time.Time `json:"created_at"`
+}
+
+func (lr *LogRecord) Score() int {
+    return lr.Up + lr.Down
 }
 
 type LogService struct {
@@ -87,4 +92,29 @@ func (ls *LogService) FindHighestPulse(records []*LogRecord) *LogRecord {
     }
 
     return max
+}
+
+func (ls *LogService) FindMedian(records []*LogRecord) *LogRecord {
+    l := len(records)
+
+    if l <= 0 {
+        return nil
+    }
+
+    sort.Slice(records, func(i, j int) bool {
+        return records[i].Score() > records[j].Score()
+    })
+
+    if l%2 != 0 {
+        return records[((l+1)/2)-1]
+    }
+
+    a := records[(l/2)-1]
+    b := records[l/2]
+
+    if (a.Up + a.Down) > (b.Up + b.Down) {
+        return a
+    } else {
+        return b
+    }
 }
