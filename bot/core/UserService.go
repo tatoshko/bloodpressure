@@ -19,7 +19,7 @@ func NewUserService() *UserService {
     return &UserService{}
 }
 
-func (us UserService) FindById(telegramId int64) (user *User, err error) {
+func (us *UserService) FindById(telegramId int64) (user *User, err error) {
     pg := pgsql.GetClient()
     q := `select uuid, telegram_id, created_at from bloodpressure.public.user where telegram_id = $1`
 
@@ -32,4 +32,21 @@ func (us UserService) FindById(telegramId int64) (user *User, err error) {
     }
 
     return user, nil
+}
+
+func (us *UserService) Add(telegramId int64) (err error) {
+    pg := pgsql.GetClient()
+    q := `insert into bloodpressure.public.user (telegram_id) values ($1)`
+
+    _, err = pg.Exec(q, telegramId)
+    return
+}
+
+func (us *UserService) CheckExist(telegramId int64) (exist bool, err error) {
+    var user *User
+    if user, err = us.FindById(telegramId); err != nil {
+        return false, err
+    }
+
+    return user != nil, nil
 }
