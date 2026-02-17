@@ -63,7 +63,7 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         highestPulse.CreatedAt.Format("02 Jan 15:04"),
     )
     statMessage += fmt.Sprintf(
-        "Медианное значение: <b>%d/%d</b>",
+        "Медианное значение:\n<b>%d/%d</b>",
         medianPressure.Up,
         medianPressure.Down,
     )
