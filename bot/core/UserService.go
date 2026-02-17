@@ -44,7 +44,7 @@ func (us *UserService) Add(telegramId int64) (err error) {
 
 func (us *UserService) CheckExist(telegramId int64) (exist bool, err error) {
     var user *User
-    if user, err = us.FindById(telegramId); err != nil {
+    if user, err = us.FindById(telegramId); err != nil && err != sql.ErrNoRows {
         return false, err
     }
 
