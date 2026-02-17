@@ -45,7 +45,7 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     highestPressure := logService.FindHighestPressure(logRecords)
     highestPulse := logService.FindHighestPulse(logRecords)
-    medianPressure := logService.FindMedian(logRecords)
+    medianPressure := logService.FindMedian(logRecords[:])
 
     statMessage += "За последнее время\n\n"
     statMessage += fmt.Sprintf(
