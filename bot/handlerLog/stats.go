@@ -47,14 +47,14 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     statMessage += "За последнее время\n\n"
     statMessage += fmt.Sprintf(
-        "Самое высокое давление:\n<b>%d/%d</b> при пульсе: %d было %s\n\n",
+        "Самое высокое давление:\n<b>%d/%d</b> при пульсе %d было %s\n\n",
         highestPressure.Up,
         highestPressure.Down,
         highestPressure.Pulse,
         highestPressure.CreatedAt.Format("02 Jan 15:04"),
     )
     statMessage += fmt.Sprintf(
-        "Самый высокий пульс:\n<b>%d</b> при давлении: %d/%d был %s\n\n",
+        "Самый высокий пульс:\n<b>%d</b> при давлении %d/%d был %s\n\n",
         highestPulse.Pulse,
         highestPulse.Up,
         highestPulse.Down,
