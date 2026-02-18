@@ -137,10 +137,9 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
             &record.Pulse,
             &record.CreatedAt,
         ); err != nil {
+            log.Printf("ERRRRR %s", err.Error())
             return nil, err
         }
-
-        log.Printf("%s %v", name, record)
 
         switch name {
         case "lower_pressure":
@@ -153,6 +152,8 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
             stat.HigherPulse = record
         }
     }
+
+    log.Printf("%v", stat)
 
     return stat, nil
 }
