@@ -2,7 +2,6 @@ package handlerLog
 
 import (
     "database/sql"
-    "log"
     "sort"
     "time"
     "useful.team/bloodpressure/m/bot/core"
@@ -125,29 +124,34 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
     stat = &LogStat{}
 
     for rows.Next() {
-        var name, uuid, userUUID string
-        var up, down, pulse int
-        var createdAt time.Time
+        var name string
+        record := &LogRecord{}
 
         if err = rows.Scan(
-            &name, &uuid, &userUUID, &up, &down, &pulse, &createdAt,
+            &name,
+            &record.UUID,
+            &record.UserUUID,
+            &record.Up,
+            &record.Down,
+            &record.Pulse,
+            &record.CreatedAt,
         ); err != nil {
             return nil, err
         }
 
         switch name {
         case "lower_pressure":
-            stat.LowerPressure = &LogRecord{UUID: uuid, UserUUID: userUUID, Up: up, Down: down, Pulse: pulse, CreatedAt: createdAt}
+            stat.LowerPressure = record
         case "higher_pressure":
-            stat.HigherPressure = &LogRecord{UUID: uuid, UserUUID: userUUID, Up: up, Down: down, Pulse: pulse, CreatedAt: createdAt}
+            stat.HigherPressure = record
         case "lower_pulse":
-            stat.LowerPulse = &LogRecord{UUID: uuid, UserUUID: userUUID, Up: up, Down: down, Pulse: pulse, CreatedAt: createdAt}
+            stat.LowerPulse = record
         case "higher_pulse":
-            stat.HigherPulse = &LogRecord{UUID: uuid, UserUUID: userUUID, Up: up, Down: down, Pulse: pulse, CreatedAt: createdAt}
+            stat.HigherPulse = record
         }
+        default:
+            fmt.Printf("THIS MF!")
     }
-
-    log.Printf("%v", stat)
 
     return stat, nil
 }
