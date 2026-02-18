@@ -3,6 +3,7 @@ module useful.team/bloodpressure/m
 go 1.25.3
 
 require (
+	github.com/go-echarts/go-echarts/v2 v2.6.7
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/lib/pq v1.11.2
 	github.com/xuri/excelize/v2 v2.10.0

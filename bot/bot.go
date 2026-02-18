@@ -73,4 +73,5 @@ func registerCommands() {
     Commands["start"] = handlerStart.Start
     Commands["stat"] = handlerLog.Stat
     Commands["xlsx"] = handlerLog.Xlsx
+    Commands["graph"] = handlerLog.Graph
 }
