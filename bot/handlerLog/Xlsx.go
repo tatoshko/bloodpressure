@@ -28,10 +28,9 @@ func Xlsx(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }
 
     logService := NewLogService(user)
-    lastRecordsCount := 30
 
     var logRecords []*LogRecord
-    if logRecords, err = logService.GetLast(lastRecordsCount); err != nil {
+    if logRecords, err = logService.FindLastMonthToNow(); err != nil {
         msg := tgbotapi.NewMessage(chatID, fmt.Sprintf("Не смог достать записи: %s", err.Error()))
 
         if _, err := bot.Send(msg); err != nil {
@@ -49,6 +48,8 @@ func Xlsx(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     }()
 
     f.SetSheetName("Sheet1", "Log")
+
+    f.SetColWidth("Log", "A1", "A1", 15.0)
 
     f.SetCellStr("Log", "A1", "Date")
     f.SetCellStr("Log", "B1", "Up")
