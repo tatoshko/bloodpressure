@@ -2,7 +2,6 @@ package handlerLog
 
 import (
     "database/sql"
-    "fmt"
     "sort"
     "time"
     "useful.team/bloodpressure/m/bot/core"
@@ -97,19 +96,19 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
     pg := pgsql.GetClient()
     q := `select name, uuid, user_uuid, up, down, pulse, created_at from (
         (
-            select 'lower pressure' name, *, (up + down) sum from log
+            select 'lower_pressure' name, *, (up + down) sum from log
             where user_uuid = $1 
             order by sum limit 1
         ) union (
-            select 'higher pressure' name, *, (up + down) sum from log
+            select 'higher_pressure' name, *, (up + down) sum from log
             where user_uuid = $2
             order by sum desc limit 1
         ) union (
-            select 'lower pulse' name, *, (up + down) sum from log
+            select 'lower_pulse' name, *, (up + down) sum from log
             where user_uuid = $3
             order by pulse limit 1
         ) union (
-            select 'higher pulse' name, *, (up + down) sum from log
+            select 'higher_pulse' name, *, (up + down) sum from log
             where user_uuid = $4
             order by pulse desc limit 1
         )
@@ -149,8 +148,6 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
             stat.LowerPulse = record
         case "higher_pulse":
             stat.HigherPulse = record
-        default:
-            fmt.Printf("THIS MF!")
         }
     }
 
