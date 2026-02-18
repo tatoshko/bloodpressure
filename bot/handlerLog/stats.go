@@ -36,6 +36,8 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
+    logger(fmt.Sprintf("%v", stat.HigherPressure))
+
     statMessage += fmt.Sprintf(
         "Самое высокое давление:\n<b>%d/%d</b> при пульсе <b>%d</b> было %s\n\n",
         stat.HigherPressure.Up,
