@@ -49,7 +49,7 @@ func Xlsx(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     f.SetSheetName("Sheet1", "Log")
 
-    f.SetColWidth("Log", "A1", "A1", 15.0)
+    f.SetColWidth("Log", "A1", "A1", 30.0)
 
     f.SetCellStr("Log", "A1", "Date")
     f.SetCellStr("Log", "B1", "Up")
