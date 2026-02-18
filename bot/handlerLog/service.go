@@ -125,7 +125,7 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
 
     for rows.Next() {
         var name string
-        var record *LogRecord
+        record := &LogRecord{}
 
         if err = rows.Scan(
             &name,
