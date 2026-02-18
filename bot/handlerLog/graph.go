@@ -55,7 +55,7 @@ func Graph(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         AddSeries("Downs", downs).
         AddSeries("Pulses", pulses)
 
-    file := tgbotapi.FileBytes{Bytes: line.RenderContent(), Name: "Chart"}
+    file := tgbotapi.FileBytes{Bytes: line.RenderContent(), Name: "Chart.png"}
     msg := tgbotapi.NewDocument(chatID, file)
 
     if _, err := bot.Send(msg); err != nil {
