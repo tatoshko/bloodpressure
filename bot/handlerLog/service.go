@@ -2,6 +2,7 @@ package handlerLog
 
 import (
     "database/sql"
+    "fmt"
     "sort"
     "time"
     "useful.team/bloodpressure/m/bot/core"
@@ -148,9 +149,9 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
             stat.LowerPulse = record
         case "higher_pulse":
             stat.HigherPulse = record
-        }
         default:
             fmt.Printf("THIS MF!")
+        }
     }
 
     return stat, nil
