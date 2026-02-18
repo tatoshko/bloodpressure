@@ -2,6 +2,7 @@ package handlerLog
 
 import (
     "database/sql"
+    "log"
     "sort"
     "time"
     "useful.team/bloodpressure/m/bot/core"
@@ -138,6 +139,8 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
         ); err != nil {
             return nil, err
         }
+
+        log.Printf("%s %v", name, record)
 
         switch name {
         case "lower_pressure":
