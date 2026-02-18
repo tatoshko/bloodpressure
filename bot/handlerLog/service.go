@@ -125,31 +125,25 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
     stat = &LogStat{}
 
     for rows.Next() {
-        var name string
-        record := &LogRecord{}
+        var name, uuid, userUUID string
+        var up, down, pulse int
+        var createdAt time.Time
 
         if err = rows.Scan(
-            &name,
-            &record.UUID,
-            &record.UserUUID,
-            &record.Up,
-            &record.Down,
-            &record.Pulse,
-            &record.CreatedAt,
+            &name, &uuid, &userUUID, &up, &down, &pulse, &createdAt,
         ); err != nil {
-            log.Printf("ERRRRR %s", err.Error())
             return nil, err
         }
 
         switch name {
         case "lower_pressure":
-            stat.LowerPressure = record
+            stat.LowerPressure = &LogRecord{UUID: uuid, UserUUID: userUUID, Up: up, Down: down, Pulse: pulse, CreatedAt: createdAt}
         case "higher_pressure":
-            stat.HigherPressure = record
+            stat.HigherPressure = &LogRecord{UUID: uuid, UserUUID: userUUID, Up: up, Down: down, Pulse: pulse, CreatedAt: createdAt}
         case "lower_pulse":
-            stat.LowerPulse = record
+            stat.LowerPulse = &LogRecord{UUID: uuid, UserUUID: userUUID, Up: up, Down: down, Pulse: pulse, CreatedAt: createdAt}
         case "higher_pulse":
-            stat.HigherPulse = record
+            stat.HigherPulse = &LogRecord{UUID: uuid, UserUUID: userUUID, Up: up, Down: down, Pulse: pulse, CreatedAt: createdAt}
         }
     }
 
