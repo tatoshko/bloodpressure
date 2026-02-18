@@ -101,22 +101,22 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
             order by sum limit 1
         ) union (
             select 'higher pressure' name, *, (up + down) sum from log
-            where user_uuid = $1
+            where user_uuid = $2
             order by sum desc limit 1
         ) union (
             select 'lower pulse' name, *, (up + down) sum from log
-            where user_uuid = $1
+            where user_uuid = $3
             order by pulse limit 1
         ) union (
             select 'higher pulse' name, *, (up + down) sum from log
-            where user_uuid = $1
+            where user_uuid = $4
             order by pulse desc limit 1
         )
     );`
 
     var rows *sql.Rows
 
-    if rows, err = pg.Query(q, ls.User.UUID); err != nil {
+    if rows, err = pg.Query(q, ls.User.UUID, ls.User.UUID, ls.User.UUID, ls.User.UUID); err != nil {
         return nil, err
     }
     defer rows.Close()
