@@ -57,10 +57,8 @@ func Graph(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         AddSeries("Pulses", pulses)
 
     filename := fmt.Sprintf("%s_%d", time.Now().Format("2006_01_02"), userID)
-    //render.MakeChartSnapshot(line.RenderContent(), filename)
-    render.MakeSnapshot(render.NewSnapshotConfig(line.RenderContent(), filename, func(config *render.SnapshotConfig) {
-        config.Path = "charts"
-    }))
+    logger(filename)
+    render.MakeChartSnapshot(line.RenderContent(), filename)
 
     file := tgbotapi.FileBytes{Bytes: line.RenderContent(), Name: "chart.jpg"}
     msg := tgbotapi.NewDocument(chatID, file)
