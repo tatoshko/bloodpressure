@@ -52,9 +52,9 @@ func Graph(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     line := charts.NewLine()
     line.SetXAxis(dates).
-        AddSeries("Ups", ups).
-        AddSeries("Downs", downs).
-        AddSeries("Pulses", pulses)
+        AddSeries("Ups", ups)
+    //AddSeries("Downs", downs).
+    //AddSeries("Pulses", pulses)
 
     filename := fmt.Sprintf("%s_%d", time.Now().Format("2006_01_02"), userID)
     logger(filename)
