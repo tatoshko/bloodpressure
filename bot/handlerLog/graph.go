@@ -1,12 +1,11 @@
 package handlerLog
 
 import (
-    "bytes"
     "fmt"
     "github.com/go-echarts/go-echarts/v2/charts"
     "github.com/go-echarts/go-echarts/v2/opts"
+    "github.com/go-echarts/snapshot-chromedp/render"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-    "image"
     "time"
     "useful.team/bloodpressure/m/bot/core"
 )
@@ -57,14 +56,11 @@ func Graph(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         AddSeries("Downs", downs).
         AddSeries("Pulses", pulses)
 
-    //var img image.Image
-    var format string
-    if _, format, err = image.Decode(bytes.NewReader(line.RenderContent())); err != nil {
-        logger(err.Error())
-        return
-    }
-
-    logger(fmt.Sprintf("FORMAT %s", format))
+    filename := fmt.Sprintf("%s_%d", time.Now().Format("2006_01_02"), userID)
+    //render.MakeChartSnapshot(line.RenderContent(), filename)
+    render.MakeSnapshot(render.NewSnapshotConfig(line.RenderContent(), filename, func(config *render.SnapshotConfig) {
+        config.Path = "charts"
+    }))
 
     file := tgbotapi.FileBytes{Bytes: line.RenderContent(), Name: "chart.jpg"}
     msg := tgbotapi.NewDocument(chatID, file)
