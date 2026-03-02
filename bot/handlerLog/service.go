@@ -154,7 +154,7 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
     return stat, nil
 }
 
-func (ls *LogService) ComputeMedian(records []*LogRecord) *LogRecord {
+func (ls *LogService) ComputePressureMedian(records []*LogRecord) *LogRecord {
     l := len(records)
 
     if l <= 0 {
@@ -173,6 +173,34 @@ func (ls *LogService) ComputeMedian(records []*LogRecord) *LogRecord {
     b := records[l/2]
 
     if a.Score() > b.Score() {
+        return a
+    } else {
+        if a.Up > b.Up {
+            return a
+        }
+        return b
+    }
+}
+
+func (ls *LogService) ComputePulseMedian(records []*LogRecord) *LogRecord {
+    l := len(records)
+
+    if l <= 0 {
+        return nil
+    }
+
+    sort.Slice(records, func(i, j int) bool {
+        return records[i].Pulse > records[j].Pulse
+    })
+
+    if l%2 != 0 {
+        return records[((l+1)/2)-1]
+    }
+
+    a := records[(l/2)-1]
+    b := records[l/2]
+
+    if a.Pulse > b.Pulse {
         return a
     } else {
         if a.Up > b.Up {

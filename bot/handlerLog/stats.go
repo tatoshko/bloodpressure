@@ -36,34 +36,13 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
 
-    statMessage += fmt.Sprintf(
-        "Самое высокое давление:\n<b>%d/%d</b> при пульсе <b>%d</b> было %s\n\n",
-        stat.HigherPressure.Up,
-        stat.HigherPressure.Down,
-        stat.HigherPressure.Pulse,
-        stat.HigherPressure.CreatedAt.Format("02 Jan 15:04"),
-    )
-    statMessage += fmt.Sprintf(
-        "Самое низкое давление:\n<b>%d/%d</b> при пульсе <b>%d</b> было %s\n\n",
-        stat.LowerPressure.Up,
-        stat.LowerPressure.Down,
-        stat.LowerPressure.Pulse,
-        stat.LowerPressure.CreatedAt.Format("02 Jan 15:04"),
-    )
+    statMessage += "За последний месяц\n"
 
     statMessage += fmt.Sprintf(
-        "Самый высокий пульс:\n<b>%d</b> при давлении <b>%d/%d</b> был %s\n\n",
-        stat.HigherPulse.Pulse,
-        stat.HigherPulse.Up,
-        stat.HigherPulse.Down,
-        stat.HigherPulse.CreatedAt.Format("02 Jan 15:04"),
-    )
-    statMessage += fmt.Sprintf(
-        "Самый низкий пульс:\n<b>%d</b> при давлении <b>%d/%d</b> был %s\n\n",
-        stat.LowerPulse.Pulse,
-        stat.LowerPulse.Up,
-        stat.LowerPulse.Down,
-        stat.LowerPulse.CreatedAt.Format("02 Jan 15:04"),
+        "<b>%d/%d</b> - <b>%d/%d</b>. Пульс: %d-%d\n",
+        stat.LowerPressure.Up, stat.LowerPressure.Down,
+        stat.HigherPressure.Up, stat.HigherPressure.Down,
+        stat.LowerPulse.Pulse, stat.HigherPulse.Pulse,
     )
 
     var logRecords []*LogRecord
@@ -75,12 +54,14 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         }
         return
     }
-    medianPressure := logService.ComputeMedian(logRecords)
+    medianPressure := logService.ComputePressureMedian(logRecords)
+    medianPulse := logService.ComputePulseMedian(logRecords)
 
     statMessage += fmt.Sprintf(
-        "Медианное давление за поледний месяц:\n<b>%d/%d</b>",
+        "Медианные:\n<b>%d/%d</b>. Пульс: %d",
         medianPressure.Up,
         medianPressure.Down,
+        medianPulse.Pulse,
     )
 
     msg := tgbotapi.NewMessage(chatID, statMessage)
