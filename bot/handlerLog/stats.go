@@ -39,7 +39,7 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     statMessage += "Давление за текущий + последний месяц\n"
 
     statMessage += fmt.Sprintf(
-        "от <b>%d/%d</b> до <b>%d/%d</b>\n",
+        "от <b>%d/%d</b> до <b>%d/%d</b>\n\n",
         stat.LowerPressure.Up, stat.LowerPressure.Down,
         stat.HigherPressure.Up, stat.HigherPressure.Down,
     )
