@@ -47,20 +47,20 @@ func Xlsx(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         }
     }()
 
-    f.SetSheetName("Sheet1", "Log")
+    f.SetSheetName("Sheet1", "LogShort")
 
-    f.SetColWidth("Log", "A", "A", 15.0)
+    f.SetColWidth("LogShort", "A", "A", 15.0)
 
-    f.SetCellStr("Log", "A1", "Date")
-    f.SetCellStr("Log", "B1", "Up")
-    f.SetCellStr("Log", "C1", "Down")
-    f.SetCellStr("Log", "D1", "Pulse")
+    f.SetCellStr("LogShort", "A1", "Date")
+    f.SetCellStr("LogShort", "B1", "Up")
+    f.SetCellStr("LogShort", "C1", "Down")
+    f.SetCellStr("LogShort", "D1", "Pulse")
 
     for i, record := range logRecords {
-        f.SetCellValue("Log", fmt.Sprintf("A%d", i+2), record.CreatedAt)
-        f.SetCellInt("Log", fmt.Sprintf("B%d", i+2), int64(record.Up))
-        f.SetCellInt("Log", fmt.Sprintf("C%d", i+2), int64(record.Down))
-        f.SetCellInt("Log", fmt.Sprintf("D%d", i+2), int64(record.Pulse))
+        f.SetCellValue("LogShort", fmt.Sprintf("A%d", i+2), record.CreatedAt)
+        f.SetCellInt("LogShort", fmt.Sprintf("B%d", i+2), int64(record.Up))
+        f.SetCellInt("LogShort", fmt.Sprintf("C%d", i+2), int64(record.Down))
+        f.SetCellInt("LogShort", fmt.Sprintf("D%d", i+2), int64(record.Pulse))
     }
 
     var buf *bytes.Buffer

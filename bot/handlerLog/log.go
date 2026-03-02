@@ -3,21 +3,24 @@ package handlerLog
 import (
     "fmt"
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    "regexp"
     "strconv"
     "useful.team/bloodpressure/m/bot/core"
 )
 
-func Log(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
-    logger := getLogger("Log")
+const (
+    Short = `^(?P<up>\d{2,3})/(?P<down>\d{2,3})/(?P<pulse>\d{2,3})$`
+)
+
+func LogShort(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+    logger := getLogger("LogShort")
 
     userID := update.Message.From.ID
     chatID := update.Message.Chat.ID
 
-    params := core.GetParams(`^(?P<up>\d+)\D+(?P<down>\d+)\D+(?P<pulse>\d+)$`, update.Message.Text)
+    params := core.GetParams(Short, update.Message.Text)
 
     if len(params) == 3 {
-        //logger(fmt.Sprintf("UserID: %d, Params: %v", userID, params))
-
         userService := core.NewUserService()
 
         if user, err := userService.FindById(userID); err != nil {
@@ -43,4 +46,8 @@ func Log(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
             }
         }
     }
+}
+
+func Check(message string) bool {
+    return regexp.MustCompile(Short).MatchString(message)
 }
