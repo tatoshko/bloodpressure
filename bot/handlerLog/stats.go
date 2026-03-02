@@ -39,10 +39,9 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     statMessage += "За последний месяц\n"
 
     statMessage += fmt.Sprintf(
-        "<b>%d/%d</b> - <b>%d/%d</b>. Пульс: %d-%d\n",
+        "%d/%d - %d/%d\n\n",
         stat.LowerPressure.Up, stat.LowerPressure.Down,
         stat.HigherPressure.Up, stat.HigherPressure.Down,
-        stat.LowerPulse.Pulse, stat.HigherPulse.Pulse,
     )
 
     var logRecords []*LogRecord
@@ -55,13 +54,11 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         return
     }
     medianPressure := logService.ComputePressureMedian(logRecords)
-    medianPulse := logService.ComputePulseMedian(logRecords)
 
     statMessage += fmt.Sprintf(
-        "Медианные:\n<b>%d/%d</b>. Пульс: %d",
+        "Медианные:\n<b>%d/%d</b>",
         medianPressure.Up,
         medianPressure.Down,
-        medianPulse.Pulse,
     )
 
     msg := tgbotapi.NewMessage(chatID, statMessage)
