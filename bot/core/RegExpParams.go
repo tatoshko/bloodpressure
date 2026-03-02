@@ -6,11 +6,16 @@ func GetParams(regEx, str string) (paramsMap map[string]string) {
     var compRegEx = regexp.MustCompile(regEx)
     match := compRegEx.FindStringSubmatch(str)
 
-    paramsMap = make(map[string]string)
-    for i, name := range compRegEx.SubexpNames() {
-        if i > 0 && i <= len(match) {
-            paramsMap[name] = match[i]
-        }
+    if len(match) < 1 {
+        return nil
     }
+
+    paramsMap = make(map[string]string)
+    names := compRegEx.SubexpNames()
+
+    for i, p := range match {
+        paramsMap[names[i]] = p
+    }
+
     return paramsMap
 }

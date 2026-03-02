@@ -18,9 +18,7 @@ func LogShort(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     userID := update.Message.From.ID
     chatID := update.Message.Chat.ID
 
-    params := core.GetParams(Short, update.Message.Text)
-
-    if len(params) == 3 {
+    if params := core.GetParams(Short, update.Message.Text); params != nil {
         userService := core.NewUserService()
 
         if user, err := userService.FindById(userID); err != nil {
