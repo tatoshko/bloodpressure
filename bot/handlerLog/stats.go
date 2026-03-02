@@ -57,13 +57,13 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     medianPulse := logService.ComputePulseMedian(logRecords)
 
     statMessage += fmt.Sprintf(
-        "Медеанное:\n<b>%d/%d</b>\n\n\n",
+        "Медеанное: <b>%d/%d</b>\n\n",
         medianPressure.Up,
         medianPressure.Down,
     )
 
     statMessage += fmt.Sprintf(
-        "Пульс от <b>%d</b> до <b>%d</b>, медианное: %d\n\n",
+        "Пульс от <b>%d</b> до <b>%d</b>, медианный: <b>%d</b>\n\n",
         stat.LowerPulse.Pulse, stat.HigherPulse.Pulse, medianPulse.Pulse,
     )
 
