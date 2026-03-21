@@ -3,6 +3,7 @@ package bot
 import (
     tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "log"
+    "net/http"
     "strings"
     "useful.team/bloodpressure/m/bot/callbacks"
     "useful.team/bloodpressure/m/bot/core"
@@ -15,7 +16,7 @@ var (
 )
 
 func Start(config Config) {
-    if API, err := tba.NewBotAPI(config.Token); err == nil {
+    if API, err := tba.NewBotAPIWithClient(config.Token, config.APIEndpoint, &http.Client{}); err == nil {
 
         wh, _ := tba.NewWebhook(config.Hook + "/" + config.Token)
         if _, err := API.Request(wh); err != nil {
