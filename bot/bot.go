@@ -31,10 +31,10 @@ func Start(config Config) {
     // Подменяем разрешение имени
     transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
         // Проверяем, обращаемся ли мы к api.telegram.org:443
-        if addr == "api.telegram.org:443" {
+        if addr == "api.telegram.org" {
             // Используем один из известных IP Telegram
             // Можно попробовать несколько: 149.154.167.220, 149.154.167.221, 149.154.167.51
-            addr = "149.154.167.220:443"
+            addr = "149.154.167.220"
         }
         // Для всех остальных адресов используем стандартный Dialer
         return (&net.Dialer{
