@@ -49,13 +49,12 @@ func Start(config Config) {
     }
 
     if API, err := tba.NewBotAPIWithClient(config.Token, config.APIEndpoint, hc); err == nil {
-
         wh, _ := tba.NewWebhook(config.Hook + "/" + config.Token)
         if _, err := API.Request(wh); err != nil {
             log.Printf("SetHoook error %s\n", err.Error())
         }
 
-        API.Debug = false
+        API.Debug = true
 
         registerCommands()
 
