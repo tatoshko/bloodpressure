@@ -1,10 +1,13 @@
 package bot
 
 import (
+    "context"
     tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "log"
+    "net"
     "net/http"
     "strings"
+    "time"
     "useful.team/bloodpressure/m/bot/callbacks"
     "useful.team/bloodpressure/m/bot/core"
     "useful.team/bloodpressure/m/bot/handlerLog"
@@ -16,7 +19,36 @@ var (
 )
 
 func Start(config Config) {
-    if API, err := tba.NewBotAPIWithClient(config.Token, config.APIEndpoint, &http.Client{}); err == nil {
+    transport := &http.Transport{
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+        }).DialContext,
+        TLSHandshakeTimeout: 10 * time.Second,
+        // Force using specific IP for api.telegram.org
+    }
+
+    // Подменяем разрешение имени
+    transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
+        // Проверяем, обращаемся ли мы к api.telegram.org:443
+        if addr == "api.telegram.org:443" {
+            // Используем один из известных IP Telegram
+            // Можно попробовать несколько: 149.154.167.220, 149.154.167.221, 149.154.167.51
+            addr = "149.154.167.220:443"
+        }
+        // Для всех остальных адресов используем стандартный Dialer
+        return (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+        }).DialContext(ctx, network, addr)
+    }
+
+    hc := &http.Client{
+        Transport: transport,
+        Timeout:   30 * time.Second,
+    }
+
+    if API, err := tba.NewBotAPIWithClient(config.Token, config.APIEndpoint, hc); err == nil {
 
         wh, _ := tba.NewWebhook(config.Hook + "/" + config.Token)
         if _, err := API.Request(wh); err != nil {
