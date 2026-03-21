@@ -30,12 +30,14 @@ func Start(config Config) {
 
     // Подменяем разрешение имени
     transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-        log.Printf("ADDR: %s", addr)
-        if addr == "api.telegram.org" {
+        log.Printf("ADDR1: %s", addr)
+        if addr == "api.telegram.org:443" {
             // Используем один из известных IP Telegram
             // Можно попробовать несколько: 149.154.167.220, 149.154.167.221, 149.154.167.51
-            addr = "149.154.167.220"
+            addr = "149.154.167.220:443"
         }
+
+        log.Printf("ADDR2: %s", addr)
         // Для всех остальных адресов используем стандартный Dialer
         return (&net.Dialer{
             Timeout:   30 * time.Second,
