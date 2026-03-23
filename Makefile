@@ -8,3 +8,5 @@ build:
 	@ git pull origin main
 	@ go build -ldflags="-s -w" -o bloodpressure
 	@ sudo systemctl restart bloodpressure
+install:
+	@ ln -s bloodpressure.service /etc/systemd/system/
