@@ -11,4 +11,3 @@ build:
 install:
 	@ ln -s /var/bot/bloodpressure/bloodpressure.service /etc/systemd/system
 	@ sudo systemctl daemon-reload
-	@ sudo systemctl start bloodpressure.service
