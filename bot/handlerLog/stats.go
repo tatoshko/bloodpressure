@@ -8,7 +8,7 @@ import (
 
 func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
     var err error
-    logger := getLogger("GetLast")
+    logger := getLogger("Stat")
 
     userID := update.Message.From.ID
     chatID := update.Message.Chat.ID
@@ -32,7 +32,7 @@ func Stat(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 
     var stat *LogStat
     if stat, err = logService.FindStatistic(); err != nil {
-        logger(err.Error())
+        logger("Find statistic", err.Error())
         return
     }
 
