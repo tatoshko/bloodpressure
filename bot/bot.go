@@ -59,10 +59,17 @@ func Start(config Config) {
 
     log.Printf("Bot API successfully initialized\n")
 
+    log.Printf("Delete old webhook\n")
+    dwh := tba.DeleteWebhookConfig{DropPendingUpdates: true}
+    if _, err := API.Request(dwh); err != nil {
+        log.Printf("DeleteWebhook error %s\n", err.Error())
+    }
+    log.Printf("Successfully deleted old webhook\n")
+
     whs := config.Hook + "/" + config.Token
     wh, _ := tba.NewWebhook(whs)
 
-    log.Printf("Trying set webhook: %s\n", whs)
+    log.Printf("Trying set new webhook: %s\n", whs)
 
     if _, err := API.Request(wh); err != nil {
         log.Printf("SetHoook error %s\n", err.Error())
