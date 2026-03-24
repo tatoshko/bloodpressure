@@ -75,6 +75,8 @@ func Start(config Config) {
         log.Printf("SetHoook error %s\n", err.Error())
     }
 
+    log.Printf("Successfully setted new webhook\n")
+
     API.Debug = false
 
     registerCommands()
