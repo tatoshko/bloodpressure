@@ -1,7 +1,6 @@
 package bot
 
 import (
-    "context"
     tba "github.com/go-telegram-bot-api/telegram-bot-api/v5"
     "log"
     "net"
@@ -30,20 +29,21 @@ func Start(config Config) {
         // Force using specific IP for api.telegram.org
     }
 
+    // Код ниже "пока" н нужен, переехали на другой сервак, все работает и так
     // Подменяем разрешение имени
-    transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-        if addr == "api.telegram.org:443" {
-            // Используем один из известных IP Telegram
-            // Можно попробовать несколько: 149.154.167.220, 149.154.167.221, 149.154.167.51
-            //addr = "149.154.167.220:443"
-        }
-
-        // Для всех остальных адресов используем стандартный Dialer
-        return (&net.Dialer{
-            Timeout:   30 * time.Second,
-            KeepAlive: 30 * time.Second,
-        }).DialContext(ctx, network, addr)
-    }
+    //transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
+    //    if addr == "api.telegram.org:443" {
+    //        // Используем один из известных IP Telegram
+    //        // Можно попробовать несколько: 149.154.167.220, 149.154.167.221, 149.154.167.51
+    //        // addr = "149.154.167.220:443"
+    //    }
+    //
+    //    // Для всех остальных адресов используем стандартный Dialer
+    //    return (&net.Dialer{
+    //        Timeout:   30 * time.Second,
+    //        KeepAlive: 30 * time.Second,
+    //    }).DialContext(ctx, network, addr)
+    //}
 
     hc := &http.Client{
         Transport: transport,
