@@ -96,23 +96,23 @@ func (ls *LogService) FindStatistic() (stat *LogStat, err error) {
     pg := pgsql.GetClient()
     q := `select name, uuid, user_uuid, up, down, pulse, created_at from (
         (
-            select 'lower_pressure' name, *, (up + down) sum from log l1
+            select 'lower_pressure' name, *, (up + down) sum from log
             where user_uuid = $1 
             order by sum limit 1
         ) union (
-            select 'higher_pressure' name, *, (up + down) sum from log l2
+            select 'higher_pressure' name, *, (up + down) sum from log
             where user_uuid = $2
             order by sum desc limit 1
         ) union (
-            select 'lower_pulse' name, *, (up + down) sum from log l3
+            select 'lower_pulse' name, *, (up + down) sum from log
             where user_uuid = $3
             order by pulse limit 1
         ) union (
-            select 'higher_pulse' name, *, (up + down) sum from log l4
+            select 'higher_pulse' name, *, (up + down) sum from log
             where user_uuid = $4
             order by pulse desc limit 1
         )
-    );`
+    ) as u;`
 
     var rows *sql.Rows
 
