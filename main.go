@@ -27,6 +27,8 @@ type Config struct {
 func main() {
     config := ReadConfig()
 
+    log.Printf("Config loaded\n")
+
     go initHttpServer(config.Server)
     go pgsql.Init(config.Pg)
     bot.Start(config.Bot)
@@ -52,9 +54,11 @@ func ReadConfig() (config Config) {
 func initHttpServer(config ServerConfig) {
     addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
 
-    log.Printf("Bind to: [%s]", addr)
+    log.Printf("Trying bind to: [%s]", addr)
 
     if err := http.ListenAndServe(addr, nil); err != nil {
         log.Fatalln(err.Error())
     }
+
+    log.Printf("HTTP server is ready\n")
 }

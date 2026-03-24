@@ -19,6 +19,8 @@ var (
 )
 
 func Start(config Config) {
+    log.Printf("Start bot\n")
+
     transport := &http.Transport{
         DialContext: (&net.Dialer{
             Timeout:   30 * time.Second,
@@ -48,58 +50,67 @@ func Start(config Config) {
         Timeout:   30 * time.Second,
     }
 
-    if API, err := tba.NewBotAPIWithClient(config.Token, config.APIEndpoint, hc); err == nil {
-        wh, _ := tba.NewWebhook(config.Hook + "/" + config.Token)
-        if _, err := API.Request(wh); err != nil {
-            log.Printf("SetHoook error %s\n", err.Error())
-        }
+    var err error
+    var API *tba.BotAPI
+    if API, err = tba.NewBotAPIWithClient(config.Token, config.APIEndpoint, hc); err != nil {
+        log.Fatalf("NewAPIBot error %s\n", err.Error())
+        return
+    }
 
-        API.Debug = true
+    log.Printf("Bot API successfully initialized\n")
 
-        registerCommands()
+    whs := config.Hook + "/" + config.Token
+    wh, _ := tba.NewWebhook(whs)
 
-        updates := API.ListenForWebhook("/" + API.Token)
+    log.Printf("Trying set webhook: %s\n", whs)
 
-        for update := range updates {
-            if update.Message != nil {
-                message := update.Message
+    if _, err := API.Request(wh); err != nil {
+        log.Printf("SetHoook error %s\n", err.Error())
+    }
 
-                direct := int64(message.From.ID) == message.Chat.ID
-                tagMe := strings.Index(message.CommandWithAt(), config.Name) != -1
+    API.Debug = false
 
-                if message.IsCommand() && (tagMe || direct) {
-                    if handler, found := Commands[message.Command()]; found {
-                        log.Printf(
-                            "MessageID: '%d', Command: '%s', Data: '%s', From: '%d'\n",
-                            message.MessageID, message.Command(), message.CommandArguments(), message.From.ID,
-                        )
-                        go handler(API, update)
-                    }
-                } else {
-                    if handlerLog.Check(update.Message.Text) {
-                        go handlerLog.LogShort(API, update)
-                    }
+    registerCommands()
+
+    updates := API.ListenForWebhook("/" + API.Token)
+
+    for update := range updates {
+        if update.Message != nil {
+            message := update.Message
+
+            direct := int64(message.From.ID) == message.Chat.ID
+            tagMe := strings.Index(message.CommandWithAt(), config.Name) != -1
+
+            if message.IsCommand() && (tagMe || direct) {
+                if handler, found := Commands[message.Command()]; found {
+                    log.Printf(
+                        "MessageID: '%d', Command: '%s', Data: '%s', From: '%d'\n",
+                        message.MessageID, message.Command(), message.CommandArguments(), message.From.ID,
+                    )
+                    go handler(API, update)
                 }
-            } else if update.CallbackQuery != nil {
-                data := update.CallbackQuery.Data
-
-                log.Printf("CallBackQuery %s", data)
-
-                var handlerID string
-                if strings.HasPrefix(data, "/") {
-                    parts := strings.SplitN(data, " ", 2)
-                    handlerID = strings.TrimPrefix(parts[0], "/")
-                } else {
-                    handlerID = data
-                }
-
-                if handler, found := callbacks.GetHandler(handlerID); found {
-                    handler(API, update)
+            } else {
+                if handlerLog.Check(update.Message.Text) {
+                    go handlerLog.LogShort(API, update)
                 }
             }
+        } else if update.CallbackQuery != nil {
+            data := update.CallbackQuery.Data
+
+            log.Printf("CallBackQuery %s", data)
+
+            var handlerID string
+            if strings.HasPrefix(data, "/") {
+                parts := strings.SplitN(data, " ", 2)
+                handlerID = strings.TrimPrefix(parts[0], "/")
+            } else {
+                handlerID = data
+            }
+
+            if handler, found := callbacks.GetHandler(handlerID); found {
+                handler(API, update)
+            }
         }
-    } else {
-        log.Fatalf("NewAPIBot error %s\n", err.Error())
     }
 }
 
