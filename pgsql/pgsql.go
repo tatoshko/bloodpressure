@@ -37,7 +37,7 @@ func Init(config Config) *sql.DB {
         panic(err)
     }
 
-    logger("DB successfully initialized")
+    logger("DB successfully initialized\n")
 
     return db
 }
