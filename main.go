@@ -1,64 +1,35 @@
 package main
 
 import (
-    "encoding/json"
     "fmt"
-    "io"
+    "github.com/caarlos0/env/v11"
     "log"
-    "net/http"
-    "os"
     "useful.team/bloodpressure/m/bot"
+    "useful.team/bloodpressure/m/httpServer"
     "useful.team/bloodpressure/m/pgsql"
 )
 
 var err error
 
-type ServerConfig struct {
-    Host string `json:"host"`
-    Port int    `json:"port"`
+type Config struct {
+    Bot    bot.Config        `envPrefix:"BOT_"`
+    Pg     pgsql.Config      `envPrefix:"PG_"`
+    Server httpServer.Config `envPrefix:"SERVER_"`
 }
 
-type Config struct {
-    Bot    bot.Config   `json:"bot"`
-    Pg     pgsql.Config `json:"pg"`
-    Server ServerConfig `json:"server"`
+func (c Config) ToString() string {
+    return fmt.Sprintf("%s%s%s\n", c.Server.ToString(), c.Pg.ToString(), c.Bot.ToString())
 }
 
 func main() {
-    config := ReadConfig()
-
-    log.Printf("Config loaded\n")
-
-    go initHttpServer(config.Server)
-    go pgsql.Init(config.Pg)
-    bot.Start(config.Bot)
-
-}
-
-func ReadConfig() (config Config) {
-    var jsonFile *os.File
-    if jsonFile, err = os.Open("config.json"); err != nil {
-        panic(err)
-    }
-    defer jsonFile.Close()
-
-    bytes, _ := io.ReadAll(jsonFile)
-
-    if err = json.Unmarshal(bytes, &config); err != nil {
-        panic(err)
-    }
-
-    return
-}
-
-func initHttpServer(config ServerConfig) {
-    addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
-
-    log.Printf("Trying bind to: [%s]", addr)
-
-    if err := http.ListenAndServe(addr, nil); err != nil {
+    var config Config
+    if err := env.Parse(&config); err != nil {
         log.Fatalln(err.Error())
     }
 
-    log.Printf("HTTP server is ready\n")
+    log.Printf("Config loaded: \n%s\n", config.ToString())
+
+    go httpServer.Init(config.Server)
+    go pgsql.Init(config.Pg)
+    bot.Start(config.Bot)
 }

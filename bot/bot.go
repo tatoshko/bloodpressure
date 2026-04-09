@@ -73,6 +73,7 @@ func Start(config Config) {
 
     if _, err := API.Request(wh); err != nil {
         log.Printf("SetHoook error %s\n", err.Error())
+        return
     }
 
     log.Printf("Successfully setted new webhook\n")

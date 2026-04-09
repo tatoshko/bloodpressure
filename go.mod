@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	github.com/caarlos0/env/v11 v11.4.0 // indirect
 	github.com/chromedp/cdproto v0.0.0-20231011050154-1d073bb38998 // indirect
 	github.com/chromedp/chromedp v0.9.3 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect

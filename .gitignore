@@ -52,3 +52,6 @@ Temporary Items
 .apdisk
 assets/rice-box.go
 config.json
+.env
+.env.local
+.env.production
